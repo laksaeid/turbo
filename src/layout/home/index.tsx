@@ -1,10 +1,10 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 const HomeLayout = () => {
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      <div>asd</div>
+      <Typography variant="h4" align="center"> turbo </Typography>
       <Box
         sx={{
           flex: "1 1 0%",
