@@ -6,8 +6,6 @@ import useAddTodo from "../../hooks/useAddTodo";
 import Todos from "../../components/todos";
 
 const Home = () => {
-const {mutate} = useAddTodo()
-
   const schema = z.object({
     todo: z.string().min(3).max(10),
   });
@@ -15,18 +13,24 @@ const {mutate} = useAddTodo()
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
-  const addTodoHandler = function(data:z.infer<typeof schema>){
+  const { mutate } = useAddTodo(reset);
+  const addTodoHandler = function (data: z.infer<typeof schema>) {
     mutate(data);
-  }
+  };
   return (
-    <Box sx={{
-      display:'flex',
-      flexDirection:'column',
-      gap:2
-    }} onSubmit={handleSubmit(addTodoHandler)} component={'form'}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+      }}
+      onSubmit={handleSubmit(addTodoHandler)}
+      component={"form"}
+    >
       <TextField
         error={errors.todo?.message ? true : false}
         helperText={errors.todo?.message}
@@ -35,7 +39,7 @@ const {mutate} = useAddTodo()
         label="todo"
         name="todo"
       />
-      <Todos/>
+      <Todos />
     </Box>
   );
 };
