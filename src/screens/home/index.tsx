@@ -39,7 +39,7 @@ const Home = () => {
         label="todo"
         name="todo"
       />
-      <Todos />
+      <Todos reset={reset} />
     </Box>
   );
 };
