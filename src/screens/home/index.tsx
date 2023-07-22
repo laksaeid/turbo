@@ -4,8 +4,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useAddTodo from "../../hooks/useAddTodo";
 import Todos from "../../components/todos";
+import {  FormEventHandler, useState } from "react";
+import { useEditTodo } from "../../hooks/useEditTodo";
 
 const Home = () => {
+const [isEdit, setIsEdit] = useState<boolean | string>();
+
   const schema = z.object({
     todo: z.string().min(3).max(10),
   });
@@ -14,6 +18,8 @@ const Home = () => {
     register,
     formState: { errors },
     reset,
+    setValue,
+    getValues
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
@@ -21,6 +27,14 @@ const Home = () => {
   const addTodoHandler = function (data: z.infer<typeof schema>) {
     mutate(data);
   };
+
+  const {mutate:editMutate} = useEditTodo(isEdit as string,reset)
+  const editTodoHandler:FormEventHandler<HTMLFormElement> = function(e){
+    e.preventDefault()
+    editMutate({"todo":getValues('todo')})
+    setIsEdit(false)
+    
+  }
   return (
     <Box
       sx={{
@@ -28,7 +42,7 @@ const Home = () => {
         flexDirection: "column",
         gap: 2,
       }}
-      onSubmit={handleSubmit(addTodoHandler)}
+      onSubmit={ isEdit ? editTodoHandler : handleSubmit(addTodoHandler)}
       component={"form"}
     >
       <TextField
@@ -36,10 +50,10 @@ const Home = () => {
         helperText={errors.todo?.message}
         inputProps={{ ...register("todo") }}
         type="text"
-        label="todo"
+        placeholder="todo"
         name="todo"
       />
-      <Todos reset={reset} />
+      <Todos setIsEdit={setIsEdit} setValue={setValue} reset={reset} />
     </Box>
   );
 };
