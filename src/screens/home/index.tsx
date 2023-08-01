@@ -41,6 +41,8 @@ const [isEdit, setIsEdit] = useState<boolean | string>();
         display: "flex",
         flexDirection: "column",
         gap: 2,
+        width:'100%',
+        px:3
       }}
       onSubmit={ isEdit ? editTodoHandler : handleSubmit(addTodoHandler)}
       component={"form"}
@@ -49,6 +51,9 @@ const [isEdit, setIsEdit] = useState<boolean | string>();
         error={errors.todo?.message ? true : false}
         helperText={errors.todo?.message}
         inputProps={{ ...register("todo") }}
+        sx={{
+          bgcolor:'white'
+        }}
         type="text"
         placeholder="todo"
         name="todo"
